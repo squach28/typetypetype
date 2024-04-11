@@ -10,10 +10,16 @@ const Chat = () => {
             const message = `${user} joined the room!`
             setChat(prev => [...prev, message])
         })
+
+        socket.on('left', (...args: string[]) => {
+            const user = args[0]
+            const message = `${user} left the room.`
+            setChat(prev => [...prev, message])
+        })
     }, [])
 
     return (
-        <div className="flex flex-col bg-gray-800 w-1/5 h-full absolute right-0 top-0 p-4">
+        <div className="flex flex-col bg-gray-800 w-1/5 h-full absolute right-0 top-0 p-4 overflow-y-scroll">
             <h1 className="text-white text-2xl">Chat</h1>
             <ul>
                 {chat.map(msg => (

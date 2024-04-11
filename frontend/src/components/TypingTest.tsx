@@ -20,9 +20,6 @@ const TypingTest = () => {
 
         socket.on('connect', onConnect)
         socket.on('disconnect', onDisconnect)
-        socket.on('connect', () => {
-            console.log('hello')
-        })
 
         return () => {
             socket.off('connect', onConnect)
