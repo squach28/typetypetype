@@ -26,7 +26,7 @@ const generatePassage = async () => {
     const res = await axios.get('https://monkeytype.com/languages/english.json')
     const passage = []
     const words = res.data.words
-    const NUM_OF_WORDS = 100
+    const NUM_OF_WORDS = 10
     for(let i = 0; i < NUM_OF_WORDS; i++) {
         const word = words[Math.floor(Math.random() * words.length)]
         passage.push(`${word} `)
@@ -55,6 +55,12 @@ io.on('connection', (socket) => {
         const user = mapping.get(msg.userId)
         const content = msg.content
         io.emit('message', `${user}: ${content}`)
+    })
+
+    socket.on('complete', (...args) => {
+        const socketId = args[0]
+        const user = mapping.get(socketId)
+        io.emit('message', `${user} finished!`)
     })
 
     socket.conn.on('close', (reason) => {
