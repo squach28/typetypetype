@@ -8,7 +8,7 @@ const Word = (wordProps: WordProps) => {
 
     const charArr = wordProps.content.split('')
     return (
-        <div>
+        <div className="text-xl">
             {wordProps.completed ? 
             charArr.map((char, index) => <span className="text-green-500" key={index}>{char}</span>)
                 :
