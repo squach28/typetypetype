@@ -1,11 +1,35 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Word from "./Word"
+import { socket } from "../utils/socket"
 
 const TypingTest = () => {
     const [active, setActive] = useState(0)
     const [words,] = useState(['hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello '])
     const [completed, setCompleted] = useState([false, false, false])
+    const [, setIsConnected] = useState(socket.connected)
     const [curr, setCurr] = useState('')
+
+    useEffect(() => {
+        const onConnect = () => {
+            setIsConnected(true)
+        }
+
+        const onDisconnect = () => {
+            setIsConnected(false)
+        }
+
+        socket.on('connect', onConnect)
+        socket.on('disconnect', onDisconnect)
+        socket.on('connect', () => {
+            console.log('hello')
+        })
+
+        return () => {
+            socket.off('connect', onConnect)
+            socket.off('disconnect', onDisconnect)
+        }
+    }, [])
+
 
     const onWordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCurr(() => {
