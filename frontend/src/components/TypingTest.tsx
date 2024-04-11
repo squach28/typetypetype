@@ -8,7 +8,6 @@ const TypingTest = () => {
     const [curr, setCurr] = useState('')
 
     const onWordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        
         setCurr(() => {
             if(e.target.value === words[active]) {
                 setCompleted(prev => {
