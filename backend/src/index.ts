@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 2000
 const app = express()
 const server = http.createServer(app)
 
-const mapping = {}
+const mapping = new Map<string, string>()
 
 const io = new Server(server, {
     cors: {
@@ -15,13 +15,29 @@ const io = new Server(server, {
     }
 })
 
+const animals = ['hippo', 'dog', 'cat', 'rabbit']
+
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({ message: 'hello' })
 })
 
 io.on('connection', (socket) => {
-    console.log(socket)
-    socket.broadcast.emit('join', 'hello!')
+    const animal = animals[Math.floor(Math.random() * animals.length)]
+    mapping.set(socket.id, animal)
+    socket.broadcast.emit('join', animal)
+
+    socket.on('message', (...args) => {
+        const msg = args[0]
+        console.log(msg)
+        const user = mapping.get(msg.userId)
+        const content = msg.content
+        io.emit('message', `${user}: ${content}`)
+    })
+
+    socket.conn.on('close', (reason) => {
+        mapping.delete(socket.id)
+        socket.broadcast.emit('left', animal)
+    })
 })
 
 server.listen(PORT, () => {
