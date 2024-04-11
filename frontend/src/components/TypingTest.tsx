@@ -22,17 +22,19 @@ const TypingTest = () => {
     }
 
     return (
-        <div className="w-1/2 mx-auto flex flex-col justify-center items-center">
-            <ul className="flex gap-2 bg-gray-700 w-full p-2 my-2 flex-wrap">
-                {words.map((word, index) => 
-                index === active ? 
-                <Word key={index} content={word} compare={curr} completed={completed[index]} />
-                    :
-                <Word key={index} content={word} compare={''} completed={completed[index]} />
-                )}
-            </ul>
+        <div className="w-1/2 min-h-96 px-2 py-8 rounded-md bg-gray-700 mx-auto flex flex-col justify-between">
+            <div>
+                <ul className="flex gap-2 bg-gray-700 w-full p-2 my-2 flex-wrap">
+                    {words.map((word, index) =>
+                    index === active ?
+                    <Word key={index} content={word} compare={curr} completed={completed[index]} />
+                        :
+                    <Word key={index} content={word} compare={''} completed={completed[index]} />
+                    )}
+                </ul>
+            </div>
             <input 
-                className="bg-white border w-1/2 p-1 rounded-md focus:outline-none focus:bg-gray-200"
+                className="bg-white border w-1/2 p-1 mx-auto rounded-md focus:outline-none focus:bg-gray-200"
                 type="text"
                 onChange={onWordChange}
                 placeholder="Type word here..."
