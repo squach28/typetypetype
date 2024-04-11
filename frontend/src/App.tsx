@@ -6,6 +6,7 @@ const App = () => {
     <div className="w-full min-h-screen max-h-screen bg-gray-900 text-white">
       <a href="/" className="text-4xl p-4 block">typetypetype</a>
       <TypingTest />
+      <Chat />
     </div>
   )
 }
