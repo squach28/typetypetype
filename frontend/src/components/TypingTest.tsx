@@ -33,7 +33,7 @@ const TypingTest = () => {
                 )}
             </ul>
             <input 
-                className="bg-white border w-1/4 p-1 rounded-md focus:outline-none focus:bg-gray-200"
+                className="bg-white border w-1/2 p-1 rounded-md focus:outline-none focus:bg-gray-200"
                 type="text"
                 onChange={onWordChange}
                 placeholder="Type word here..."
