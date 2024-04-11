@@ -28,8 +28,7 @@ const TypingTest = () => {
         })
 
         return () => {
-            socket.off('connect', onConnect)
-            socket.off('disconnect', onDisconnect)
+            socket.removeAllListeners()
         }
     }, [])
 
@@ -39,6 +38,9 @@ const TypingTest = () => {
             if(e.target.value === words[active]) {
                 setCompleted(prev => {
                     prev[active] = true
+                    if(active === words.length - 1) {
+                        socket.emit('complete', socket.id)
+                    }
                     return prev
                 })
                 setActive(prev => prev + 1)
