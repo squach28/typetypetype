@@ -4,8 +4,8 @@ import { socket } from "../utils/socket"
 
 const TypingTest = () => {
     const [active, setActive] = useState(0)
-    const [words,] = useState(['hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello '])
-    const [completed, setCompleted] = useState([false, false, false])
+    const [words, setWords] = useState<string[]>([])
+    const [completed, setCompleted] = useState<boolean[]>([])
     const [, setIsConnected] = useState(socket.connected)
     const [curr, setCurr] = useState('')
 
@@ -20,6 +20,12 @@ const TypingTest = () => {
 
         socket.on('connect', onConnect)
         socket.on('disconnect', onDisconnect)
+        socket.on('send_passage', (...args) => {
+            console.log(args)
+            const passage = args[0]
+            setWords(passage)
+            setCompleted(passage.map(() => false))
+        })
 
         return () => {
             socket.off('connect', onConnect)
