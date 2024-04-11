@@ -3,7 +3,7 @@ import Word from "./Word"
 
 const TypingTest = () => {
     const [active, setActive] = useState(0)
-    const [words,] = useState(['hello ', 'world ', 'hi '])
+    const [words,] = useState(['hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello ', 'hello ', 'world ', 'hi ', 'hello '])
     const [completed, setCompleted] = useState([false, false, false])
     const [curr, setCurr] = useState('')
 
@@ -23,8 +23,8 @@ const TypingTest = () => {
     }
 
     return (
-        <div className="w-full flex flex-col justify-center items-center">
-            <ul className="flex gap-2">
+        <div className="w-1/2 mx-auto flex flex-col justify-center items-center">
+            <ul className="flex gap-2 bg-gray-700 w-full p-2 my-2 flex-wrap">
                 {words.map((word, index) => 
                 index === active ? 
                 <Word key={index} content={word} compare={curr} completed={completed[index]} />
@@ -33,9 +33,10 @@ const TypingTest = () => {
                 )}
             </ul>
             <input 
-                className="bg-white border w-1/4"
+                className="bg-white border w-1/4 p-1 rounded-md focus:outline-none focus:bg-gray-200"
                 type="text"
                 onChange={onWordChange}
+                placeholder="Type word here..."
                 value={curr} />
         </div>
     )

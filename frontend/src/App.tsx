@@ -2,8 +2,8 @@ import TypingTest from "./components/TypingTest"
 
 const App = () => {
   return (
-    <div className="p-4">
-      <a href="/" className="text-4xl">typetypetype</a>
+    <div className="w-full">
+      <a href="/" className="text-4xl pt-4">typetypetype</a>
       <TypingTest />
     </div>
   )
