@@ -10,20 +10,20 @@ const Chat = () => {
             switch(message.type) {
                 case MessageType.MESSAGE:
                     return (
-                        <li key={message.id}>
+                        <li key={message.id} className="break-all">
                             <span>{message.nickname}: </span>
                             <span>{message.content}</span>
                         </li>
                     )
                 case MessageType.JOIN:
                     return(
-                        <li key={message.id}>
+                        <li key={message.id} className="break-all">
                             <p>{message.nickname} joined the room!</p>
                         </li>
                     )
                 case MessageType.LEAVE:
                     return(
-                        <li key={message.id}>
+                        <li key={message.id} className="break-all">
                             <p>{message.nickname} left the room.</p>
                         </li>
                     )
@@ -76,10 +76,10 @@ const Chat = () => {
     }
 
     return (
-        <div className="flex flex-col bg-gray-800 w-1/5 h-full absolute right-0 top-0 p-4">
+        <div className="flex flex-col bg-gray-800 w-1/5 h-full absolute right-0 top-0 p-4 flex-wrap overflow-x-hidden">
             <h1 className="text-white text-2xl font-bold">Chat</h1>
             <hr className="my-2" />
-            <ul className="">
+            <ul>
                 {messages}
             </ul>
             <form className="w-full mt-auto" onSubmit={onMessageSubmit}>
