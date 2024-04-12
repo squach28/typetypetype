@@ -4,13 +4,12 @@ import TypingTest from "./components/TypingTest"
 import ToggleChat from "./components/ToggleChat"
 
 const App = () => {
-  const [showChat, setShowChat] = useState<boolean>(false)
+  const [showChat, setShowChat] = useState<boolean>(true)
 
   const toggleShowChat = () => {
     setShowChat(prev => !prev)
   }
 
-  console.log(showChat)
 
   return (
     <div className="w-full min-h-screen flex bg-gray-900 text-white overflow-x-hidden">
