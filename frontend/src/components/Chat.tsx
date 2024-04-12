@@ -17,13 +17,13 @@ const Chat = () => {
                     )
                 case MessageType.JOIN:
                     return(
-                        <li key={message.id} className="break-all">
+                        <li key={message.id} className="break-all font-bold">
                             <p>{message.nickname} joined the room!</p>
                         </li>
                     )
                 case MessageType.LEAVE:
                     return(
-                        <li key={message.id} className="break-all">
+                        <li key={message.id} className="break-all font-bold">
                             <p>{message.nickname} left the room.</p>
                         </li>
                     )
