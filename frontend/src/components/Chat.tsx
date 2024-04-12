@@ -80,7 +80,7 @@ const Chat = (props: ChatProps) => {
     }
 
     return (
-        <div className={`flex flex-col bg-gray-800 w-full h-screen p-4 flex-wrap z-20 ${props.showChat ? 'relative' : 'opacity-0'}`}>
+        <div className={`flex flex-col bg-gray-800 w-full h-screen p-4 flex-wrap z-20 shadow-2xl ${props.showChat ? 'relative' : 'opacity-0'}`}>
             <h1 className="text-white text-2xl font-bold">Chat</h1>
             <hr className="my-2" />
             <ul>

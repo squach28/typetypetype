@@ -11,7 +11,7 @@ const App = () => {
 
 
   return (
-    <div className="w-full min-h-screen flex bg-gray-900 text-white overflow-x-hidden">
+    <div className="w-full min-h-screen flex bg-slate-900 text-white overflow-x-hidden">
       <a href="/" className="text-4xl p-4 block">typetypetype</a>
       <TypingTest />
         <div className="w-1/5 relative">
