@@ -2,7 +2,11 @@ import { useEffect, useMemo, useState } from "react"
 import { socket } from "../utils/socket"
 import { Message, MessageType } from "../types/Message"
 
-const Chat = () => {
+interface ChatProps {
+    showChat: boolean
+}
+
+const Chat = (props: ChatProps) => {
     const [chat, setChat] = useState<Message[]>([])
     const [message, setMessage] = useState<string>('')
     const messages = useMemo(() => {
@@ -17,13 +21,13 @@ const Chat = () => {
                     )
                 case MessageType.JOIN:
                     return(
-                        <li key={message.id} className="break-all font-bold">
+                        <li key={message.id} className="break-all font-bold text-green-500">
                             <p>{message.nickname} joined the room!</p>
                         </li>
                     )
                 case MessageType.LEAVE:
                     return(
-                        <li key={message.id} className="break-all font-bold">
+                        <li key={message.id} className="break-all font-bold text-red-500">
                             <p>{message.nickname} left the room.</p>
                         </li>
                     )
@@ -76,7 +80,7 @@ const Chat = () => {
     }
 
     return (
-        <div className="flex flex-col bg-gray-800 w-full h-screen relative p-4 flex-wrap z-20">
+        <div className={`flex flex-col bg-gray-800 w-full h-screen p-4 flex-wrap z-20 ${props.showChat ? 'relative' : 'opacity-0'}`}>
             <h1 className="text-white text-2xl font-bold">Chat</h1>
             <hr className="my-2" />
             <ul>
