@@ -45,7 +45,12 @@ io.on('connection', (socket) => {
         socketId: socket.id,
         nickname
     }
-    socket.broadcast.emit('join', joinMessage)
+
+    const roomId = socket.handshake.query['roomId'] as string
+
+    socket.join(roomId)
+
+    socket.to(roomId).emit('join', joinMessage)
 
     io.to(socket.id).emit('join', {...joinMessage, nickname: `You (${nickname})`})
 
