@@ -51,7 +51,7 @@ const TypingTest = () => {
     }
 
     return (
-        <div className="w-1/2 min-h-96 px-2 py-8 rounded-md bg-gray-700 mx-auto flex flex-col justify-between shadow-md">
+        <div className="w-1/2 h-1/2 px-2 py-8 rounded-md my-auto bg-gray-700 mx-auto flex flex-col justify-between shadow-md">
             <div>
                 <ul className="flex gap-2 bg-gray-700 w-full p-2 my-2 flex-wrap">
                     {words.map((word, index) =>

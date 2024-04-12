@@ -76,7 +76,7 @@ const Chat = () => {
     }
 
     return (
-        <div className="flex flex-col bg-gray-800 w-1/5 h-full absolute right-0 top-0 p-4 flex-wrap overflow-x-hidden">
+        <div className="flex flex-col bg-gray-800 w-full h-screen relative p-4 flex-wrap z-20">
             <h1 className="text-white text-2xl font-bold">Chat</h1>
             <hr className="my-2" />
             <ul>
