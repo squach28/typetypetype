@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react"
-import { socket } from "../utils/socket"
 import { Message, MessageType } from "../types/Message"
+import { Socket } from "socket.io-client"
 
 interface ChatProps {
     showChat: boolean
+    socket: Socket
 }
 
 const Chat = (props: ChatProps) => {
@@ -48,31 +49,31 @@ const Chat = (props: ChatProps) => {
     }, [chat])
 
     useEffect(() => {
-        socket.on('join', (...args: Message[]) => {
+        props.socket.on('join', (...args: Message[]) => {
             const message = args[0]
             setChat(prev => [...prev, message])
         })
 
-        socket.on('left', (...args: Message[]) => {
+        props.socket.on('left', (...args: Message[]) => {
             const message = args[0]
             setChat(prev => [...prev, message])
         })
 
-        socket.on('message', (...args: Message[]) => {
+        props.socket.on('message', (...args: Message[]) => {
             const message = args[0]
             setChat(prev => [...prev, message])
         })
 
         return () => {
-            socket.removeAllListeners()
+            props.socket.removeAllListeners()
         }
-    }, [])
+    }, [props.socket])
 
     const onMessageSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if(message !== '') {
-            socket.emit('message', {
-                socketId: socket.id,
+            props.socket.emit('message', {
+                socketId: props.socket.id,
                 content: message
             })
             setMessage('')

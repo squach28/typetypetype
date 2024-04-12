@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react"
 import Word from "./Word"
-import { socket } from "../utils/socket"
+import { Socket } from "socket.io-client"
 
-const TypingTest = () => {
+interface TypingTestProps {
+    socket: Socket
+}
+
+const TypingTest = (props: TypingTestProps) => {
     const [active, setActive] = useState(0)
     const [words, setWords] = useState<string[]>([])
     const [completed, setCompleted] = useState<boolean[]>([])
-    const [, setIsConnected] = useState(socket.connected)
+    const [, setIsConnected] = useState(props.socket.connected)
     const [curr, setCurr] = useState('')
 
     useEffect(() => {
@@ -18,18 +22,18 @@ const TypingTest = () => {
             setIsConnected(false)
         }
 
-        socket.on('connect', onConnect)
-        socket.on('disconnect', onDisconnect)
-        socket.on('send_passage', (...args) => {
+        props.socket.on('connect', onConnect)
+        props.socket.on('disconnect', onDisconnect)
+        props.socket.on('send_passage', (...args) => {
             const passage = args[0]
             setWords(passage)
             setCompleted(passage.map(() => false))
         })
 
         return () => {
-            socket.removeAllListeners()
+            props.socket.removeAllListeners()
         }
-    }, [])
+    }, [props.socket])
 
 
     const onWordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +42,7 @@ const TypingTest = () => {
                 setCompleted(prev => {
                     prev[active] = true
                     if(active === words.length - 1) {
-                        socket.emit('complete', socket.id)
+                        props.socket.emit('complete', props.socket.id)
                     }
                     return prev
                 })
