@@ -91,6 +91,7 @@ io.on('connection', (socket) => {
     socket.conn.on('close', (reason) => {
         const socketId = socket.id
         const nickname = mapping.get(socketId)
+        const roomId = socket.handshake.query['roomId'] as string
         mapping.delete(socket.id)
 
         const message = {
@@ -99,7 +100,7 @@ io.on('connection', (socket) => {
             socketId,
             nickname,
         }
-        socket.broadcast.emit('left', message)
+        io.in(roomId).emit('left', message)
     })
 
     
