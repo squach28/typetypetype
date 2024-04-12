@@ -5,7 +5,6 @@ import ToggleChat from "./components/ToggleChat"
 
 const App = () => {
   const [showChat, setShowChat] = useState<boolean>(true)
-
   const toggleShowChat = () => {
     setShowChat(prev => !prev)
   }

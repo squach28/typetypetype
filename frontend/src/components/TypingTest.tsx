@@ -21,7 +21,6 @@ const TypingTest = () => {
         socket.on('connect', onConnect)
         socket.on('disconnect', onDisconnect)
         socket.on('send_passage', (...args) => {
-            console.log(args)
             const passage = args[0]
             setWords(passage)
             setCompleted(passage.map(() => false))
