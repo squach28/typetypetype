@@ -64,6 +64,7 @@ io.on('connection', (socket) => {
     socket.on('message', async (...args) => {
         const msg = args[0]
         const socketId = msg.socketId
+        const roomId = socket.handshake.query['roomId'] as string
         const nickname = mapping.get(socketId)
         const content = msg.content
         const message = {
@@ -73,7 +74,8 @@ io.on('connection', (socket) => {
             nickname,
             content
         }
-        io.emit('message', message)
+        console.log(roomId)
+        io.in(roomId).emit('message', message)
     })
 
     socket.on('complete', (...args) => {
