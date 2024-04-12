@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
     }
     socket.broadcast.emit('join', joinMessage)
 
-    console.log(io.engine.clientsCount)
+    io.to(socket.id).emit('join', {...joinMessage, nickname: `You (${nickname})`})
 
     if(io.engine.clientsCount === 3) {
         generatePassage()
