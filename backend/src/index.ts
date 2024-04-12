@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
 import axios from 'axios'
+import {v4 as uuidv4 } from 'uuid'
 
 const PORT = process.env.PORT || 2000
 
@@ -36,9 +37,15 @@ const generatePassage = async () => {
 }
 
 io.on('connection', (socket) => {
-    const animal = animals[Math.floor(Math.random() * animals.length)]
-    mapping.set(socket.id, animal)
-    socket.broadcast.emit('join', animal)
+    const nickname = animals[Math.floor(Math.random() * animals.length)]
+    mapping.set(socket.id, nickname)
+    const joinMessage = {
+        id: uuidv4(),
+        type: 'join',
+        socketId: socket.id,
+        nickname
+    }
+    socket.broadcast.emit('join', joinMessage)
 
     console.log(io.engine.clientsCount)
 
@@ -51,10 +58,17 @@ io.on('connection', (socket) => {
 
     socket.on('message', async (...args) => {
         const msg = args[0]
-        console.log(msg)
-        const user = mapping.get(msg.userId)
+        const socketId = msg.socketId
+        const nickname = mapping.get(socketId)
         const content = msg.content
-        io.emit('message', `${user}: ${content}`)
+        const message = {
+            id: uuidv4(),
+            type: 'message',
+            socketId,
+            nickname,
+            content
+        }
+        io.emit('message', message)
     })
 
     socket.on('complete', (...args) => {
@@ -64,8 +78,17 @@ io.on('connection', (socket) => {
     })
 
     socket.conn.on('close', (reason) => {
+        const socketId = socket.id
+        const nickname = mapping.get(socketId)
         mapping.delete(socket.id)
-        socket.broadcast.emit('left', animal)
+
+        const message = {
+            id: uuidv4(),
+            type: 'leave',
+            socketId,
+            nickname,
+        }
+        socket.broadcast.emit('left', message)
     })
 
     
