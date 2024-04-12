@@ -54,11 +54,15 @@ io.on('connection', (socket) => {
 
     io.to(socket.id).emit('join', {...joinMessage, nickname: `You (${nickname})`})
 
-    if(io.engine.clientsCount === 3) {
-        generatePassage()
-            .then((passage: string[]) => {
-                io.emit('send_passage', passage)
-            })
+    if(io.sockets.adapter.rooms.get(roomId) !== undefined) {
+        const room = io.sockets.adapter.rooms.get(roomId) as Set<string>
+        if(room.size == 3) {
+            generatePassage()
+                .then((passage: string[]) => {
+                    io.emit('send_passage', passage)
+                })
+        }
+
     }
 
     socket.on('message', async (...args) => {
