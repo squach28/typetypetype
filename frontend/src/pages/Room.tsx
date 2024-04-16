@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react"
-import Chat from "./components/Chat"
-import TypingTest from "./components/TypingTest"
-import ToggleChat from "./components/ToggleChat"
-import { useSearchParams } from 'react-router-dom'
+import Chat from "../components/Chat"
+import TypingTest from "../components/TypingTest"
+import ToggleChat from "../components/ToggleChat"
+import { useParams } from 'react-router-dom'
 import { Socket, io } from "socket.io-client"
-import { GameState } from "./types/GameState"
+import { GameState } from "../types/GameState"
 
-const App = () => {
+const Room = () => {
   const [showChat, setShowChat] = useState<boolean>(true)
-  const [searchParams,] = useSearchParams()
   const [socket, setSocket] = useState<Socket | null>(null)
   const [gameState, setGameState] = useState<GameState>(GameState.WAITING)
   const [timer, setTimer] = useState<number | null>(null)
-  const roomId = searchParams.get('roomId')
+  const { roomId } = useParams()
 
   const INITIAL_COUNTDOWN_VALUE = 3
 
   useEffect(() => {
-    const connectToRoom = (roomId: string | null) => {
-      if(roomId !== null) {
+    const connectToRoom = (roomId: string | undefined) => {
+      if(roomId !== undefined) {
         const SOCKET_URL = import.meta.env.NODE_ENV === 'production' ? '' : `http://localhost:2000?roomId=${roomId}`
 
         const connection = roomId !== null ? io(SOCKET_URL, {
@@ -98,4 +97,4 @@ const App = () => {
   )
 }
 
-export default App
+export default Room
