@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react"
 import Word from "./Word"
 import { Socket } from "socket.io-client"
+import { GameState } from "../types/GameState"
 
 interface TypingTestProps {
     socket: Socket
+    gameState: GameState
+    startTimer: () => void
 }
 
 const TypingTest = (props: TypingTestProps) => {
@@ -52,11 +55,15 @@ const TypingTest = (props: TypingTestProps) => {
             return e.target.value
         })
     }
-
+    
     return (
         <div className="w-1/3 h-1/2 px-2 py-6 rounded-md my-auto bg-gray-700 mx-auto flex flex-col gap-6 justify-between shadow-md">
             <div>
-                <ul className="flex gap-2 bg-gray-700 w-full p-2 my-2 flex-wrap">
+                {props.gameState === GameState.WAITING ? 
+                    <button className="mx-auto block bg-green-500 px-4 py-2 rounded-lg text-lg" onClick={props.startTimer}>Start Game</button>
+                        :
+                    <ul className="flex gap-2 bg-gray-700 w-full p-2 my-2 flex-wrap">
+                    
                     {words.map((word, index) =>
                     index === active ?
                     <Word key={index} content={word} compare={curr} completed={completed[index]} />
@@ -64,6 +71,8 @@ const TypingTest = (props: TypingTestProps) => {
                     <Word key={index} content={word} compare={''} completed={completed[index]} />
                     )}
                 </ul>
+                }
+
             </div>
             <input 
                 className="bg-white text-black border w-1/2 p-1 mx-auto rounded-md focus:outline-none focus:bg-gray-200"
