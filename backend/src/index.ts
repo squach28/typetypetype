@@ -4,6 +4,7 @@ import { Server } from 'socket.io'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 
 import dotenv from 'dotenv'
 import roomRouter from './routes/roomRoutes'
@@ -13,6 +14,11 @@ const PORT = process.env.PORT || 2000
 
 const app = express()
 
+const corsOptions = {
+    origin: 'http://localhost:8080'
+}
+
+app.use(cors(corsOptions))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.json())
 
