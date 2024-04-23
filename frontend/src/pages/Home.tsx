@@ -1,9 +1,11 @@
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from "@mui/material"
-import { useState } from "react"
+import React, { useState } from "react"
 
 const Home = () => {
     const [showCreateRoom, setShowCreateRoom] = useState<boolean>(false)
     const [requirePassword, setRequirePassword] = useState<boolean>(false)
+    const [roomName, setRoomName] = useState<string>('')
+    const [roomPassword, setRoomPassword] = useState<string>('')
 
     const handleCreateRoomClick = () => {
       setShowCreateRoom(true)
@@ -15,6 +17,17 @@ const Home = () => {
 
     const handleRequirePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setRequirePassword(e.target.checked)
+      if(!e.target.checked) {
+        setRoomPassword('')
+      }
+    }
+
+    const onRoomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setRoomName(e.target.value)
+    }
+
+    const onRoomPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setRoomPassword(e.target.value)
     }
 
     return (
@@ -40,6 +53,8 @@ const Home = () => {
               label="Room name"
               required
               fullWidth
+              value={roomName}
+              onChange={onRoomNameChange}
               sx={{
                 marginTop: 2
               }}
@@ -53,8 +68,11 @@ const Home = () => {
             />
             {requirePassword ? 
               <TextField
+                autoFocus
                 required
                 fullWidth
+                value={roomPassword}
+                onChange={onRoomPasswordChange}
                 label="Room Password"
                 sx={{
                   marginTop: 2
