@@ -6,6 +6,11 @@ const Home = () => {
     const [requirePassword, setRequirePassword] = useState<boolean>(false)
     const [roomName, setRoomName] = useState<string>('')
     const [roomPassword, setRoomPassword] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(false)
+    const [errors, setErrors] = useState({
+      roomName: '',
+      roomPassword: ''
+    })
 
     const handleCreateRoomClick = () => {
       setShowCreateRoom(true)
@@ -13,21 +18,92 @@ const Home = () => {
 
     const handleCreateRoomClose = () => {
       setShowCreateRoom(false)
+      setRequirePassword(false)
+      setRoomPassword('')
+      setRoomName('')
     }
 
     const handleRequirePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setRequirePassword(e.target.checked)
       if(!e.target.checked) {
         setRoomPassword('')
+        setErrors({
+          ...errors,
+          roomPassword: ''
+        })
       }
     }
 
     const onRoomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if(e.target.value !== '') {
+        setErrors({
+          ...errors,
+          roomName: ''
+        })
+      } else {
+        setErrors({
+          ...errors,
+          roomName: 'Room name is required'
+        })
+      }
       setRoomName(e.target.value)
     }
 
     const onRoomPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if(requirePassword && e.target.value !== '') {
+        setErrors({
+          ...errors,
+          roomPassword: ''
+        })
+      } else if(requirePassword && e.target.value === '') {
+        setErrors({
+          ...errors,
+          roomPassword: 'Password is required if checked'
+        })
+      }
       setRoomPassword(e.target.value)
+    }
+
+    const onCreateRoomClick = () => {
+      if(roomName === '') {
+        setErrors({
+          ...errors,
+          roomName: 'Room name is required'
+        })
+        return
+      }
+
+      if(requirePassword && roomPassword === '') {
+        setErrors({
+          ...errors,
+          roomPassword: 'Password is required if checked'
+        })
+        return
+      }
+
+      createRoom(roomName, roomPassword)
+    }
+
+    const createRoom = async (name: string, password = '') => {
+      try {
+        const body = {
+          name,
+          password
+        }
+        fetch(`${import.meta.env.VITE_API_URL}/room`, {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(body)
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data)
+          })
+      } catch(e) {
+        console.log(e)
+      }
     }
 
     return (
@@ -55,6 +131,8 @@ const Home = () => {
               fullWidth
               value={roomName}
               onChange={onRoomNameChange}
+              error={errors.roomName === '' ? false : true }
+              helperText={errors.roomName === '' ? null : errors.roomName}
               sx={{
                 marginTop: 2
               }}
@@ -74,6 +152,8 @@ const Home = () => {
                 value={roomPassword}
                 onChange={onRoomPasswordChange}
                 label="Room Password"
+                error={errors.roomPassword === '' ? false: true }
+                helperText={errors.roomPassword === '' ? null : errors.roomPassword}
                 sx={{
                   marginTop: 2
                 }}
@@ -84,7 +164,7 @@ const Home = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCreateRoomClose}>Cancel</Button>
-            <Button>Create</Button>
+            <Button onClick={onCreateRoomClick}>Create</Button>
           </DialogActions>
         </Dialog>
       </div>
