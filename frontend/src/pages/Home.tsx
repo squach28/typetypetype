@@ -1,5 +1,7 @@
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from "@mui/material"
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { CreateRoomRes } from "../types/CreateRoomRes"
 
 const Home = () => {
     const [showCreateRoom, setShowCreateRoom] = useState<boolean>(false)
@@ -7,6 +9,7 @@ const Home = () => {
     const [roomName, setRoomName] = useState<string>('')
     const [roomPassword, setRoomPassword] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
+    const navigate = useNavigate()    
     const [errors, setErrors] = useState({
       roomName: '',
       roomPassword: ''
@@ -98,9 +101,11 @@ const Home = () => {
           body: JSON.stringify(body)
         })
           .then(res => res.json())
-          .then(data => {
-            console.log(data)
+          .then((data: CreateRoomRes) => {
+            const { id } = data
+            navigate(`/room/${id}`, { replace: true })
           })
+          
       } catch(e) {
         console.log(e)
       }
