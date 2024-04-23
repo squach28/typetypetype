@@ -9,7 +9,8 @@ export const createRoom = async (req: Request, res: Response) => {
     try {
         const { name, password } = req.body
         const doc = adminFirestore.collection(COLLECTION_NAME).doc()
-        const hash = await bcrypt
+        if(password !== '') {
+            const hash = await bcrypt
             .genSalt(SALT_ROUNDS)
             .then(salt => bcrypt.hash(password, salt))
             
@@ -17,6 +18,13 @@ export const createRoom = async (req: Request, res: Response) => {
             name,
             password: hash
         })
+        } else {
+            await doc.create({
+                name, 
+                password
+            })
+        }
+
         res.status(201).json({
             id: doc.id,
         })
