@@ -1,4 +1,4 @@
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from "@mui/material"
+import { Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from "@mui/material"
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { CreateRoomRes } from "../types/CreateRoomRes"
@@ -9,6 +9,8 @@ const Home = () => {
     const [roomName, setRoomName] = useState<string>('')
     const [roomPassword, setRoomPassword] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
+    const [showJoinRoom, setShowJoinRoom] = useState<boolean>(false)
+    const [roomId, setRoomId] = useState<string>('')
     const navigate = useNavigate()    
     const [errors, setErrors] = useState({
       roomName: '',
@@ -93,6 +95,7 @@ const Home = () => {
           name,
           password
         }
+        setLoading(true)
         fetch(`${import.meta.env.VITE_API_URL}/room`, {
           method: 'POST',
           headers: {
@@ -105,10 +108,26 @@ const Home = () => {
             const { id } = data
             navigate(`/room/${id}`, { replace: true })
           })
+          .finally(() => {
+            setLoading(false)
+          })
           
       } catch(e) {
         console.log(e)
       }
+    }
+
+    const handleJoinRoomClick = () => {
+      setShowJoinRoom(true)
+    }
+
+    const handleJoinRoomClose = () => {
+      setShowJoinRoom(false)
+      setRoomId('')
+    }
+
+    const onRoomIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setRoomId(e.target.value)
     }
 
     return (
@@ -118,7 +137,7 @@ const Home = () => {
           <p className="text-2xl font-bold">Compete with your friends to see who truly is the typing master</p>
           <div className="flex gap-8">
             <button className="border p-2 m-1 text-2xl" onClick={handleCreateRoomClick}>Create Room</button>
-            <button className="border p-2 m-1 text-2xl">Join Room</button>
+            <button className="border p-2 m-1 text-2xl" onClick={handleJoinRoomClick}>Join Room</button>
           </div>
         </div>
         <Dialog
@@ -128,48 +147,83 @@ const Home = () => {
           maxWidth="sm"
         >
           <DialogTitle>Create Room</DialogTitle>
+          {loading ? 
+            <CircularProgress 
+              sx={{
+                marginX: 'auto'
+              }}
+            />
+          :
+            <DialogContent>
+              <TextField
+                autoFocus
+                label="Room name"
+                required
+                fullWidth
+                value={roomName}
+                onChange={onRoomNameChange}
+                error={errors.roomName === '' ? false : true }
+                helperText={errors.roomName === '' ? null : errors.roomName}
+                sx={{
+                  marginTop: 2
+                }}
+              />
+              <FormControlLabel 
+                control={<Checkbox checked={requirePassword} onChange={handleRequirePasswordChange} />}
+                label="Require Password?"
+                sx={{
+                  marginTop: 2
+                }}
+              />
+              {requirePassword ? 
+                <TextField
+                  autoFocus
+                  required
+                  fullWidth
+                  value={roomPassword}
+                  onChange={onRoomPasswordChange}
+                  label="Room Password"
+                  error={errors.roomPassword === '' ? false: true }
+                  helperText={errors.roomPassword === '' ? null : errors.roomPassword}
+                  sx={{
+                    marginTop: 2
+                  }}
+                />
+                  :
+                null
+              }
+            </DialogContent>
+          }
+          <DialogActions>
+            <Button onClick={handleCreateRoomClose}>Cancel</Button>
+            <Button onClick={onCreateRoomClick}>Create</Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={showJoinRoom}
+          onClose={handleJoinRoomClose}
+          fullWidth={true}
+          maxWidth="sm"
+        >
+          <DialogTitle>Join Room</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
-              label="Room name"
+              label="Room ID"
               required
               fullWidth
-              value={roomName}
-              onChange={onRoomNameChange}
+              value={roomId}
+              onChange={onRoomIdChange}
               error={errors.roomName === '' ? false : true }
               helperText={errors.roomName === '' ? null : errors.roomName}
               sx={{
                 marginTop: 2
               }}
             />
-            <FormControlLabel 
-              control={<Checkbox checked={requirePassword} onChange={handleRequirePasswordChange} />}
-              label="Require Password?"
-              sx={{
-                marginTop: 2
-              }}
-            />
-            {requirePassword ? 
-              <TextField
-                autoFocus
-                required
-                fullWidth
-                value={roomPassword}
-                onChange={onRoomPasswordChange}
-                label="Room Password"
-                error={errors.roomPassword === '' ? false: true }
-                helperText={errors.roomPassword === '' ? null : errors.roomPassword}
-                sx={{
-                  marginTop: 2
-                }}
-              />
-                :
-              null
-            }
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCreateRoomClose}>Cancel</Button>
-            <Button onClick={onCreateRoomClick}>Create</Button>
+            <Button onClick={handleJoinRoomClose}>Cancel</Button>
+            <Button onClick={onCreateRoomClick}>Join</Button>
           </DialogActions>
         </Dialog>
       </div>
