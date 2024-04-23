@@ -2,11 +2,22 @@ import express, { Request, Response } from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
 import axios from 'axios'
-import {v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
+import bodyParser from 'body-parser'
+
+import dotenv from 'dotenv'
+import roomRouter from './routes/roomRoutes'
+dotenv.config()
 
 const PORT = process.env.PORT || 2000
 
 const app = express()
+
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.json())
+
+app.use('/room', roomRouter)
+
 const server = http.createServer(app)
 
 const mapping = new Map<string, string>()
