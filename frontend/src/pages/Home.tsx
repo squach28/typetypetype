@@ -11,6 +11,10 @@ const Home = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [showJoinRoom, setShowJoinRoom] = useState<boolean>(false)
     const [roomId, setRoomId] = useState<string>('')
+    const [joinRoomErrors, setJoinRoomErrors] = useState({
+      roomId: '',
+      roomPassword: ''
+    })
     const navigate = useNavigate()    
     const [errors, setErrors] = useState({
       roomName: '',
@@ -127,7 +131,29 @@ const Home = () => {
     }
 
     const onRoomIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if(e.target.value !== '') {
+        setJoinRoomErrors({
+          ...joinRoomErrors,
+          roomId: ''
+        })
+      } else {
+        setJoinRoomErrors({
+          ...joinRoomErrors,
+          roomId: 'Room ID is required'
+        })
+      }
       setRoomId(e.target.value)
+    }
+
+    const onJoinRoomClick = () => {
+      if(roomId === '') {
+        setJoinRoomErrors({
+          ...joinRoomErrors,
+          roomId: 'Room ID is required'
+        })
+        return
+      }
+
     }
 
     return (
@@ -214,8 +240,8 @@ const Home = () => {
               fullWidth
               value={roomId}
               onChange={onRoomIdChange}
-              error={errors.roomName === '' ? false : true }
-              helperText={errors.roomName === '' ? null : errors.roomName}
+              error={joinRoomErrors.roomId === '' ? false : true }
+              helperText={joinRoomErrors.roomId === '' ? null : joinRoomErrors.roomId}
               sx={{
                 marginTop: 2
               }}
@@ -223,7 +249,7 @@ const Home = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleJoinRoomClose}>Cancel</Button>
-            <Button onClick={onCreateRoomClick}>Join</Button>
+            <Button onClick={onJoinRoomClick}>Join</Button>
           </DialogActions>
         </Dialog>
       </div>
