@@ -1,7 +1,8 @@
 import { Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from "@mui/material"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { CreateRoomRes } from "../types/CreateRoomRes"
+import { v4 as uuidv4 } from 'uuid'
 
 const Home = () => {
     const [showCreateRoom, setShowCreateRoom] = useState<boolean>(false)
@@ -20,6 +21,18 @@ const Home = () => {
       roomName: '',
       roomPassword: ''
     })
+    const [uid, setUid] = useState<string>('')
+
+    useEffect(() => {
+      const userId = localStorage.getItem('uid')
+      if(userId) {
+        setUid(userId)
+      } else {
+        const id = uuidv4()
+        localStorage.setItem('uid', id)
+        setUid(id)
+      }
+    }, [])
 
     const handleCreateRoomClick = () => {
       setShowCreateRoom(true)
