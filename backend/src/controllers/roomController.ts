@@ -11,14 +11,15 @@ const roomsRef = db.ref(COLLECTION_NAME)
 export const createRoom = async (req: Request, res: Response) => {
     try {
         const { name, password } = req.body
-        const ref = roomsRef.child(uuidv4())
+        const id = uuidv4()
+        const ref = roomsRef.child(id)
         const savedRef = ref.set({
-            active: false
+            name, 
+            password
         })
         
-
         res.status(201).json({
-            status: true
+            id
         })
     } catch(e) {
         res.status(500).json({ message: 'Something went wrong, please try again.'})
