@@ -21,16 +21,12 @@ const Home = () => {
       roomName: '',
       roomPassword: ''
     })
-    const [uid, setUid] = useState<string>('')
 
     useEffect(() => {
       const userId = localStorage.getItem('uid')
-      if(userId) {
-        setUid(userId)
-      } else {
+      if(userId === null) {
         const id = uuidv4()
         localStorage.setItem('uid', id)
-        setUid(id)
       }
     }, [])
 
